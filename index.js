@@ -1,50 +1,44 @@
-var form = document.getElementById('addForm')
-var itemlist = document.getElementById('items')
-var filter = document.getElementById('filter');
-form.addEventListener('submit',additem);
-itemlist.addEventListener('click',removeItem);
-filter.addEventListener('keyup',filterItems)
-function additem(e){
-    e.preventDefault();
-    var newitem = document.getElementById('item').value;
-    var description = document.getElementById('description').value;
-    var li = document.createElement('li');
-    li.className='list-group-item';
-    var desnode = document.createTextNode(" "+ description)
-    li.appendChild(document.createTextNode(newitem));
-    li.appendChild(desnode)
-    // delete button starts 
-    var deleteBtn = document.createElement('button');
-    deleteBtn.className='btn btn-danger btn-sm float-right delete'
-    deleteBtn.appendChild(document.createTextNode('X'));
-    li.appendChild(deleteBtn);
-    // delete button ends
-    //edit button 
-    var editBtn = document.createElement('button');
-    editBtn.className='btn btn-warning btn-sm float-right delete'
-    editBtn.appendChild(document.createTextNode('E'));
-    li.appendChild(editBtn);
-    //edit buttonends
-    itemlist.appendChild(li)
-}
-function removeItem(e){
-    if(e.target.classList.contains('delete')){
-      if(confirm('Are You Sure?')){
-        var li = e.target.parentElement;
-        itemlist.removeChild(li);
-      }
-    }
-}
-function filterItems(e){
-    var text = e.target.value.toLowerCase();
-    var items = itemlist.getElementsByTagName('li');
-    Array.from(items).forEach(function(item){
-      var itemName = item.firstChild.textContent;
-      if(itemName.toLowerCase().indexOf(text) != -1){
-        item.style.display = 'block';
-      } else {
-        item.style.display = 'none';
-      }
-    });
+// Put DOM elements into variables
+const myForm = document.querySelector('#my-form');
+var nameInput = document.querySelector('#name');
+var emailInput = document.querySelector('#email');
+const msg = document.querySelector('.msg');
+const userList = document.querySelector('#users');
+
+// Listen for form submit
+myForm.addEventListener('submit', onSubmit);
+
+function onSubmit(e) {
+  e.preventDefault();
+  
+  if(nameInput.value === '' || emailInput.value === '') {
+    // alert('Please enter all fields');
+    msg.classList.add('error');
+    msg.innerHTML = 'Please enter all fields';
+
+    // Remove error after 3 seconds
+    setTimeout(() => msg.remove(), 3000);
+  } else {
+    // Create new list item with user
+    const li = document.createElement('li');
+
+    // Add text node with input values
+    li.appendChild(document.createTextNode(`${nameInput.value}: ${emailInput.value}`));
+
+    // Add HTML
+    // li.innerHTML = `<strong>${nameInput.value}</strong>e: ${emailInput.value}`;
+
+    // Append to ul
+    userList.appendChild(li);
+    const name1= e.target.name.value
+    const email1= e.target.email.value
+    localStorage.setItem('name',name1)
+    localStorage.setItem('email',email1)
+
+    // Clear fields
+    nameInput.value = '';
+    emailInput.value = '';
+    
   }
+}
 
